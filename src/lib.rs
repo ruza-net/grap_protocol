@@ -27,13 +27,19 @@ mod tests {
         setup! { _dummy }
     }
 
+    macro_rules! setup_process {
+        ( $dummy:ident => $process:ident ) => {
+            use crate::process::Process;
+
+            setup! { mut $dummy }
+
+            let $process = $dummy.spawn_process();
+        };
+    }
+
     #[test]
     fn spawn_process() {
-        use crate::process::Process;
-
-        setup! { mut dummy }
-
-        let process = dummy.spawn_process();
+        setup_process! { dummy => process }
 
         assert_eq![(), process.info()];
     }
