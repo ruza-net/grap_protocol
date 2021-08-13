@@ -24,6 +24,12 @@ mod tests {
     #[test]
     fn dummy() {
         setup! { _dummy }
+    }
 
+    #[test]
+    fn spawn_process() {
+        setup! { mut dummy }
+
+        let _process = dummy.spawn_process();
     }
 }
