@@ -1,6 +1,7 @@
 mod mock;
 
 pub mod server;
+pub mod process;
 
 
 #[cfg(test)]
@@ -28,8 +29,12 @@ mod tests {
 
     #[test]
     fn spawn_process() {
+        use crate::process::Process;
+
         setup! { mut dummy }
 
-        let _process = dummy.spawn_process();
+        let process = dummy.spawn_process();
+
+        assert_eq![(), process.info()];
     }
 }

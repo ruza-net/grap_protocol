@@ -16,4 +16,9 @@ impl GraphicsServer for Dummy {
 }
 
 impl Process for () {
+    type Info = ();
+
+    fn info(&self) -> Self::Info {
+        ()
+    }
 }
