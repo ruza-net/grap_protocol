@@ -35,6 +35,14 @@ mod tests {
 
             let $process = $dummy.spawn_process();
         };
+
+        ( $dummy:ident => mut $process:ident ) => {
+            use crate::process::Process;
+
+            setup! { mut $dummy }
+
+            let mut $process = $dummy.spawn_process();
+        };
     }
 
     #[test]
@@ -45,29 +53,9 @@ mod tests {
     }
 
     #[test]
-    fn dummy_active_processes_is_empty() {
-        setup! { dummy }
+    fn halt_process() {
+        setup_process! { dummy => mut process }
 
-        assert![ dummy.active_processes().is_empty() ];
-    }
-
-    #[test]
-    fn active_processes_after_spawn_not_empty() {
-        setup! { mut dummy }
-
-        dummy.spawn_process();
-
-        assert![ !dummy.active_processes().is_empty() ];
-    }
-
-    #[test]
-    fn active_processes_after_drop_process_is_empty() {
-        setup! { mut dummy }
-
-        {
-            dummy.spawn_process();
-        }
-
-        assert![ dummy.active_processes().is_empty() ];
+        dummy.halt_process(&mut process).expect("dummy should halt");
     }
 }

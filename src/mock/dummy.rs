@@ -19,8 +19,10 @@ impl GraphicsServer for Dummy {
         ()
     }
 
-    fn active_processes(&self) -> &[Self::Process] {
-        &self.active
+    fn halt_process(&mut self, _proc: &mut Self::Process) -> Result<<Self::Process as Process>::Info, crate::process::Error> {
+        self.active.pop();
+
+        Ok(())
     }
 }
 

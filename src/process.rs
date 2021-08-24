@@ -3,3 +3,6 @@ pub trait Process {
 
     fn info(&self) -> Self::Info;
 }
+
+#[derive(Debug)]
+pub enum Error {}
