@@ -5,4 +5,5 @@ pub trait GraphicsServer {
     type Process: Process;
 
     fn spawn_process(&mut self) -> Self::Process;
+    fn active_processes(&self) -> &[Self::Process];
 }

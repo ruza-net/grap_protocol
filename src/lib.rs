@@ -11,14 +11,14 @@ mod tests {
             use super::mock::Dummy;
             use super::server::GraphicsServer;
 
-            let $dummy = Box::new(Dummy) as Box<dyn GraphicsServer<Process = ()>>;
+            let $dummy = Box::new(Dummy::default()) as Box<dyn GraphicsServer<Process = ()>>;
         };
 
         ( mut $dummy:ident ) => {
             use super::mock::Dummy;
             use super::server::GraphicsServer;
 
-            let mut $dummy = Box::new(Dummy) as Box<dyn GraphicsServer<Process = ()>>;
+            let mut $dummy = Box::new(Dummy::default()) as Box<dyn GraphicsServer<Process = ()>>;
         };
     }
 
@@ -42,5 +42,32 @@ mod tests {
         setup_process! { dummy => process }
 
         assert_eq![(), process.info()];
+    }
+
+    #[test]
+    fn dummy_active_processes_is_empty() {
+        setup! { dummy }
+
+        assert![ dummy.active_processes().is_empty() ];
+    }
+
+    #[test]
+    fn active_processes_after_spawn_not_empty() {
+        setup! { mut dummy }
+
+        dummy.spawn_process();
+
+        assert![ !dummy.active_processes().is_empty() ];
+    }
+
+    #[test]
+    fn active_processes_after_drop_process_is_empty() {
+        setup! { mut dummy }
+
+        {
+            dummy.spawn_process();
+        }
+
+        assert![ dummy.active_processes().is_empty() ];
     }
 }

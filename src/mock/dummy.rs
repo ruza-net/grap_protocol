@@ -4,14 +4,23 @@ use crate::{
 };
 
 
-pub struct Dummy;
+#[derive(Default)]
+pub struct Dummy {
+    active: Vec<()>,
+}
 
 
 impl GraphicsServer for Dummy {
     type Process = ();
 
     fn spawn_process(&mut self) -> Self::Process {
+        self.active.push(());
+
         ()
+    }
+
+    fn active_processes(&self) -> &[Self::Process] {
+        &self.active
     }
 }
 
