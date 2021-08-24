@@ -1,3 +1,3 @@
-mod dummy;
+pub mod dummy;
 
 pub use dummy::Dummy;
