@@ -8,3 +8,7 @@ edition = "2018"
 
 [dependencies]
 uuid = { version = "0.8", features = ["v4"] }
+rand = { version = "0.8", optional = true }
+
+[features]
+statistical_tests = ["rand"]

@@ -114,6 +114,45 @@ mod tests {
         let process_2 = server_2.spawn_process();
 
         server_1.halt_process(process_2).expect_err("server should reject foreign process");
+    }
+}
 
+#[cfg(feature = "statistical_tests")]
+#[cfg(test)]
+mod statistical_tests {
+    use super::*;
+
+    #[test]
+    fn multiple_foreign_process_rejections() {
+        use rand::seq::IteratorRandom;
+
+        const COUNT: usize = 1000;
+        const MAX_SPAWNED: usize = (10 as usize).pow(10);
+
+        let mut rng = rand::thread_rng();
+
+        for _ in 0..COUNT {
+            setup! { mut server_1 }
+            setup! { mut server_2 }
+
+            let mut processes_1 = vec![];
+            let mut processes_2 = vec![];
+
+            for _ in (1..MAX_SPAWNED).choose(&mut rng) {
+                processes_1.push(server_1.spawn_process());
+            }
+
+            for _ in (1..MAX_SPAWNED).choose(&mut rng) {
+                processes_2.push(server_2.spawn_process());
+            }
+
+            for process in processes_1 {
+                server_2.halt_process(process).expect_err("server should reject foreign process");
+            }
+
+            for process in processes_2 {
+                server_1.halt_process(process).expect_err("server should reject foreign process");
+            }
+        }
     }
 }
